@@ -1,6 +1,8 @@
 #ifndef MATHLIB_H
 #define MATHLIB_H
 
+#include <iostream>
+
 namespace mathlib {
 
 // Функция для сложения двух чисел
@@ -45,10 +47,20 @@ int power(int a, int b)
 // Функция для вычисления факториала числа n
 unsigned long long factorial(int n)
 {
+    // Проверяем, что число не отрицательное
     if (n < 0)
-        return -1; // ошибка для отрицательных чисел
+    {
+        std::cerr << "Error! Factorial of negative number.\n";
+        return -1; 
+    }
+    
+    // Базовый случай: 0! = 1! = 1
     if (n == 0 || n == 1)
+    {
         return 1;
+    }
+    
+    // Рекурсивный вызов для n * (n - 1)!
     return n * factorial(n - 1);
 }
 

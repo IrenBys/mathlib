@@ -43,7 +43,7 @@ int power(int a, int b)
 }
 
 // Функция для вычисления факториала числа n
-int factorial(int n)
+unsigned long long factorial(int n)
 {
     if (n < 0)
         return -1; // ошибка для отрицательных чисел

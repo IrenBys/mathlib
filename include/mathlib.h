@@ -25,13 +25,14 @@ int multiplication(int a, int b)
 }
 
 // Функция для деления двух чисел
-int division(int a, int b, double* c)
+int division(int a, int b, double* result)
 {
     if (b == 0)
     {
+        std::cerr << "Error! Division by zero!\n";
         return -1;
     }        
-    *c = a / b;
+    *result = a / b;
     return 0;
 }
 
@@ -45,8 +46,7 @@ double power(int a, int b)
         for (int i = 0; i < b; ++i)
         {
             c *= a;
-        }
-           
+        }           
     }
     else     
     {
@@ -62,23 +62,25 @@ double power(int a, int b)
 }
 
 // Функция для вычисления факториала числа n
-unsigned long long factorial(int n)
+int factorial(int n, double* result)
 {
     // Проверяем, что число не отрицательное
     if (n < 0)
     {
         std::cerr << "Error! Factorial of negative number.\n";
-        return -1; 
+        return -1;
     }
-    
+
     // Базовый случай: 0! = 1! = 1
     if (n == 0 || n == 1)
     {
-        return 1;
+         *result = 1;
+         return 0;
     }
-    
+
     // Рекурсивный вызов для n * (n - 1)!
-    return n * factorial(n - 1);
+    *result = n * factorial(n - 1);
+    return 0;
 }
 
 } // namespace mathlib

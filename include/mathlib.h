@@ -5,88 +5,123 @@
 
 namespace mathlib {
 
-// Функция для сложения двух чисел
-int addition(int a, int b)
-{
-    return a + b;
-}
-
-// Функция для вычитания двух чисел
-int substraction(int a, int b)
-{
-    return a - b;
-}
-
-
-// Функция для умножения двух чисел
-int multiplication(int a, int b)
-{
-    return a * b;
-}
-
-// Функция для деления двух чисел
-int division(int a, int b, double* result)
-{
-    if (b == 0)
+    bool check_overflow(long long value)
     {
-        std::cerr << "Error! Division by zero!\n";
-        return -1;
-    }        
-    *result = a / b;
-    return 0;
-}
-
-// Функция для возведения числа a в степень b
-double power(int a, int b)
-{
-    double c = 1.0;
-
-    if (b >= 0)
-    {
-        for (int i = 0; i < b; ++i)
+        if (value > INT_MAX || value < INT_MIN)
         {
-            c *= a;
-        }           
+            std::cerr << "Error! Overflow\n";
+            return true;
+        }
+        return false;
     }
-    else     
+
+    // Функция для сложения двух чисел
+    int addition(int a, int b, double* result)
     {
-        for (int i = 0; i < -b; ++i)
+        long long temp = (long long)a + b;
+
+        if (check_overflow(temp))
         {
-            c *= a;
+            return -1;
         }
 
-        // Инвертируем результат для отрицательной степени
-        c = 1.0 / c;
+        *result = (double)temp;
+        return 0;
     }
-    return c;
-}
 
-// Функции для вычисления факториала числа n
-
-double factorial_recursive(int n)
-{
-    // Базовый случай
-    if (n == 0 || n == 1)
+    // Функция для вычитания двух чисел
+    int substraction(int a, int b, double* result)
     {
-        return 1.0;
+        long long temp = (long long)a - b;
+
+        if (check_overflow(temp))
+        {
+            return -1;
+        }
+
+        *result = (double)temp;
+        return 0;
     }
+
+
+    // Функция для умножения двух чисел
+    int multiplication(int a, int b, double* result)
+    {
+        long long temp = (long long)a * b;
+
+        if (check_overflow(temp))
+        {
+            return -1;
+        }
+
+        *result = (double)temp;
+        return 0;
+    }
+
+    // Функция для деления двух чисел
+    int division(int a, int b, double* result)
+    {
+        if (b == 0)
+        {
+            std::cerr << "Error! Division by zero!\n";
+            return -1;
+        }        
+        *result = (double)a / b;
+        return 0;
+    }
+
+    // Функция для возведения числа a в степень b
+    int power(int a, int b, double* result)
+    {
+        double temp = 1.0;
+
+        if (b >= 0)
+        {
+            for (int i = 0; i < b; ++i)
+            {
+                temp *= a;
+            }           
+        }
+        else     
+        {
+            for (int i = 0; i < -b; ++i)
+            {
+                temp *= a;
+            }
+
+            // Инвертируем результат для отрицательной степени
+            temp = 1.0 / temp;
+        }
+        *result = temp;
+        return 0;
+    }
+
+    // Функции для вычисления факториала числа n
+
+    double factorial_recursive(int n)
+    {
+        // Базовый случай
+        if (n == 0 || n == 1)
+        {
+            return 1.0;
+        }
     
-    // Рекурсивный
-    return n * factorial_recursive(n - 1);
-}
-
-int factorial(int n, double* result)
-{
-    // Проверяем, что число не отрицательное
-    if (n < 0)
-    {
-        std::cerr << "Error! Factorial of negative number.\n";
-        return -1;
+        // Рекурсивный
+        return n * factorial_recursive(n - 1);
     }
 
-    *result = factorial_recursive(n);
-    return 0;
-}
+    int factorial(int n, double* result)
+    {
+        // Проверяем, что число не отрицательное
+        if (n < 0)
+        {
+            std::cerr << "Error! Factorial of negative number.\n";
+            return -1;
+        }
+
+        *result = factorial_recursive(n);
+        return 0;
+    }
 
 } // namespace mathlib
 

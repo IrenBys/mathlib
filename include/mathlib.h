@@ -6,7 +6,7 @@
 namespace mathlib {
 
 // Функция для сложения двух чисел
-int addition(int a, int b)
+int addition(int a, int b, double* result)
 {
     return a + b;
 }
@@ -61,7 +61,20 @@ double power(int a, int b)
     return c;
 }
 
-// Функция для вычисления факториала числа n
+// Функции для вычисления факториала числа n
+
+double factorial_recursive(int n)
+{
+    // Базовый случай
+    if (n == 0 || n == 1)
+    {
+        return 1.0;
+    }
+    
+    // Рекурсивный
+    return n * factorial_recursive(n - 1);
+}
+
 int factorial(int n, double* result)
 {
     // Проверяем, что число не отрицательное
@@ -71,15 +84,7 @@ int factorial(int n, double* result)
         return -1;
     }
 
-    // Базовый случай: 0! = 1! = 1
-    if (n == 0 || n == 1)
-    {
-         *result = 1;
-         return 0;
-    }
-
-    // Рекурсивный вызов для n * (n - 1)!
-    *result = n * factorial(n - 1);
+    *result = factorial_recursive(n);
     return 0;
 }
 

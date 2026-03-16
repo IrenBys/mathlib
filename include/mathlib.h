@@ -6,7 +6,7 @@
 namespace mathlib {
 
 // Функция для сложения двух чисел
-int addition(int a, int b, double* result)
+int addition(int a, int b)
 {
     return a + b;
 }

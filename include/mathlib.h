@@ -25,10 +25,12 @@ int multiplication(int a, int b)
 }
 
 // Функция для деления двух чисел
-int division(int a, int b, int* c)
+int division(int a, int b, double* c)
 {
     if (b == 0)
+    {
         return -1;
+    }        
     *c = a / b;
     return 0;
 }

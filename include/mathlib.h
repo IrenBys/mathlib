@@ -34,12 +34,27 @@ int division(int a, int b, int* c)
 }
 
 // Функция для возведения числа a в степень b
-int power(int a, int b)
+double power(int a, int b)
 {
-    int c = 1;
-    for (int i = 0; i < b; ++i)
+    double c = 1.0;
+
+    if (b >= 0)
     {
-        c = c * a;
+        for (int i = 0; i < b; ++i)
+        {
+            c *= a;
+        }
+           
+    }
+    else     
+    {
+        for (int i = 0; i < -b; ++i)
+        {
+            c *= a;
+        }
+
+        // Инвертируем результат для отрицательной степени
+        c = 1.0 / c;
     }
     return c;
 }

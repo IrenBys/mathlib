@@ -1,45 +1,39 @@
 #ifndef MATHLIB_H
 #define MATHLIB_H
 
-#include <iostream>
+#include <cstdio>
+#include <cstdint>
 
 namespace mathlib {
 
-    bool check_overflow(long long value)
+    int addition(int a, int b, double* result_ptr)
     {
-        if (value > INT_MAX || value < INT_MIN)
-        {
-            std::cerr << "Error! Overflow\n";
-            return true;
-        }
-        return false;
-    }
+        int result;
 
-    // Функция для сложения двух чисел
-    int addition(int a, int b, double* result)
-    {
-        long long temp = (long long)a + b;
-
-        if (check_overflow(temp))
+        // Проверка переполнения
+        if (__builtin_add_overflow(a, b, &result))
         {
+            fprintf(stderr, "Error! Overflow\n");
             return -1;
         }
 
-        *result = (double)temp;
+        *result_ptr = (double)result;    // сохраняем результат в указатель
         return 0;
     }
 
     // Функция для вычитания двух чисел
-    int substraction(int a, int b, double* result)
+    int substraction(int a, int b, double* result_ptr)
     {
-        long long temp = (long long)a - b;
+        int result;
 
-        if (check_overflow(temp))
+        // Проверка переполнения
+        if (__builtin_sub_overflow(a, b, &result))
         {
+            fprintf(stderr, "Error! Overflow\n");
             return -1;
         }
 
-        *result = (double)temp;
+        *result_ptr = (double)result;  // сохраняем результат в указатель
         return 0;
     }
 
@@ -47,14 +41,16 @@ namespace mathlib {
     // Функция для умножения двух чисел
     int multiplication(int a, int b, double* result)
     {
-        long long temp = (long long)a * b;
+        int result;
 
-        if (check_overflow(temp))
+        // Проверка переполнения
+        if (__builtin_mul_overflow(a, b, &result))
         {
+            fprintf(stderr, "Error! Overflow\n");
             return -1;
         }
 
-        *result = (double)temp;
+        *result_ptr = (double)result;  // сохраняем результат в указатель
         return 0;
     }
 
@@ -63,9 +59,9 @@ namespace mathlib {
     {
         if (b == 0)
         {
-            std::cerr << "Error! Division by zero!\n";
+            fprintf(stderr, "Error! Division by zero!\n");
             return -1;
-        }        
+        }
         *result = (double)a / b;
         return 0;
     }
@@ -80,9 +76,9 @@ namespace mathlib {
             for (int i = 0; i < b; ++i)
             {
                 temp *= a;
-            }           
+            }
         }
-        else     
+        else
         {
             for (int i = 0; i < -b; ++i)
             {
@@ -105,7 +101,7 @@ namespace mathlib {
         {
             return 1.0;
         }
-    
+
         // Рекурсивный
         return n * factorial_recursive(n - 1);
     }
@@ -115,7 +111,7 @@ namespace mathlib {
         // Проверяем, что число не отрицательное
         if (n < 0)
         {
-            std::cerr << "Error! Factorial of negative number.\n";
+            fprintf(stderr, "Error! Factorial of negative number.\n");
             return -1;
         }
 

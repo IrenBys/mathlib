@@ -4,119 +4,127 @@
 #include <cstdio>
 #include <cstdint>
 
+// Библиотека для выполнения базовых математических операций над целыми числами
+// Каждая функция принимает два целых числа в качестве аргументов и указатель на переменную для сохранения результата.
+// Функция вычисления факториала принимает одно целое число и указатель на переменную для сохранения результата.
+// Результат сохраняется в переменной, на которую указывает указатель, переданный в функцию.
+// Функции возвращают целое число, указывающее на статус выполнения операции:
+// OK                 (0)  - успешное выполнение, 
+// ERROR              (-1) - общая ошибка, 
+// OVERFLOW           (1)  - переполнение, 
+// DIV_BY_ZERO        (2)  - деление на ноль, 
+// NEGATIVE_FACTORIAL (3)  - отрицательный факториал.
+
 namespace mathlib {
 
-    int addition(int a, int b, double* result_ptr)
+    // Enum для результатов выполнения операций
+    enum Status {
+        OK = 0,            // успешное выполнение
+        ERROR = -1,        // общая ошибка
+        OVERFLOW,          // переполнение
+        DIV_BY_ZERO,       // деление на ноль
+        NEGATIVE_FACTORIAL // отрицательный факториал
+    };
+
+    // Функция для сложения
+    Status addition(int a, int b, double* result_ptr)
     {
         int result;
-
-        // Проверка переполнения
         if (__builtin_add_overflow(a, b, &result))
         {
             fprintf(stderr, "Error! Overflow\n");
-            return -1;
+            return OVERFLOW;
         }
-
-        *result_ptr = (double)result;    // сохраняем результат в указатель
-        return 0;
+        *result_ptr = (double)result;
+        return OK;
     }
 
-    // Функция для вычитания двух чисел
-    int substraction(int a, int b, double* result_ptr)
+    // Функция для вычитания
+    Status substraction(int a, int b, double* result_ptr)
     {
         int result;
-
-        // Проверка переполнения
         if (__builtin_sub_overflow(a, b, &result))
         {
             fprintf(stderr, "Error! Overflow\n");
-            return -1;
+            return OVERFLOW;
         }
-
-        *result_ptr = (double)result;  // сохраняем результат в указатель
-        return 0;
+        *result_ptr = (double)result;
+        return OK;
     }
 
-
-    // Функция для умножения двух чисел
-    int multiplication(int a, int b, double* result_ptr)
+    // Функция для умножения
+    Status multiplication(int a, int b, double* result_ptr)
     {
         int result;
-
-        // Проверка переполнения
         if (__builtin_mul_overflow(a, b, &result))
         {
             fprintf(stderr, "Error! Overflow\n");
-            return -1;
+            return OVERFLOW;
         }
-
-        *result_ptr = (double)result;  // сохраняем результат в указатель
-        return 0;
+        *result_ptr = (double)result;
+        return OK;
     }
 
-    // Функция для деления двух чисел
-    int division(int a, int b, double* result)
+    // Функция для деления
+    Status division(int a, int b, double* result_ptr)
     {
         if (b == 0)
         {
             fprintf(stderr, "Error! Division by zero!\n");
-            return -1;
+            return DIV_BY_ZERO;
         }
-        *result = (double)a / b;
-        return 0;
+        *result_ptr = (double)a / b;
+        return OK;
     }
 
     // Функция для возведения числа a в степень b
-    int power(int a, int b, double* result)
+    Status power(int a, int b, double* result_ptr)
     {
         double temp = 1.0;
 
         if (b >= 0)
         {
-            for (int i = 0; i < b; ++i)
-            {
-                temp *= a;
-            }
+            for (int i = 0; i < b; ++i) temp *= a;
         }
         else
         {
-            for (int i = 0; i < -b; ++i)
+            if (a == 0)
             {
-                temp *= a;
+                fprintf(stderr, "Error! Zero to negative power\n");
+                return ERROR;
             }
-
-            // Инвертируем результат для отрицательной степени
+            for (int i = 0; i < -b; ++i) temp *= a;
             temp = 1.0 / temp;
         }
-        *result = temp;
-        return 0;
-    }
 
-    // Функции для вычисления факториала числа n
-
-    double factorial_recursive(int n)
-    {
-        // Базовый случай
-        if (n == 0 || n == 1)
+        // Проверка переполнения double
+        if (temp != temp || temp == 1.0 / 0.0) // NaN или inf
         {
-            return 1.0;
+            fprintf(stderr, "Error! Overflow in power\n");
+            return OVERFLOW;
         }
 
-        // Рекурсивный
+        *result_ptr = temp;
+        return OK;
+    }
+
+    // Рекурсивная функция факториала
+    double factorial_recursive(int n)
+    {
+        if (n == 0 || n == 1) return 1.0;
         return n * factorial_recursive(n - 1);
     }
 
-    int factorial(int n, double* result)
+    // Функция факториала
+    Status factorial(int n, double* result_ptr)
     {
-        // Проверяем, что число не отрицательное
         if (n < 0)
         {
             fprintf(stderr, "Error! Factorial of negative number.\n");
-            return -1;
+            return NEGATIVE_FACTORIAL;
         }
-
-        *result = factorial_recursive(n);
-        return 0;
+        *result_ptr = factorial_recursive(n);
+        return OK;
     }
 
 } // namespace mathlib

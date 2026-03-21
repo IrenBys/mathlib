@@ -39,7 +39,7 @@ namespace mathlib {
 
 
     // Функция для умножения двух чисел
-    int multiplication(int a, int b, double* result)
+    int multiplication(int a, int b, double* result_ptr)
     {
         int result;
 

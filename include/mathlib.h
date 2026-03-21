@@ -18,7 +18,8 @@
 namespace mathlib {
 
     // Enum для результатов выполнения операций
-    enum Status {
+    enum Status 
+    {
         OK = 0,            // успешное выполнение
         ERROR = -1,        // общая ошибка
         OVERFLOW,          // переполнение
@@ -32,7 +33,6 @@ namespace mathlib {
         int result;
         if (__builtin_add_overflow(a, b, &result))
         {
-            fprintf(stderr, "Error! Overflow\n");
             return OVERFLOW;
         }
         *result_ptr = (double)result;
@@ -45,7 +45,6 @@ namespace mathlib {
         int result;
         if (__builtin_sub_overflow(a, b, &result))
         {
-            fprintf(stderr, "Error! Overflow\n");
             return OVERFLOW;
         }
         *result_ptr = (double)result;
@@ -58,7 +57,6 @@ namespace mathlib {
         int result;
         if (__builtin_mul_overflow(a, b, &result))
         {
-            fprintf(stderr, "Error! Overflow\n");
             return OVERFLOW;
         }
         *result_ptr = (double)result;
@@ -70,7 +68,6 @@ namespace mathlib {
     {
         if (b == 0)
         {
-            fprintf(stderr, "Error! Division by zero!\n");
             return DIV_BY_ZERO;
         }
         *result_ptr = (double)a / b;
@@ -90,7 +87,6 @@ namespace mathlib {
         {
             if (a == 0)
             {
-                fprintf(stderr, "Error! Zero to negative power\n");
                 return ERROR;
             }
             for (int i = 0; i < -b; ++i) temp *= a;
@@ -100,7 +96,6 @@ namespace mathlib {
         // Проверка переполнения double
         if (temp != temp || temp == 1.0 / 0.0) // NaN или inf
         {
-            fprintf(stderr, "Error! Overflow in power\n");
             return OVERFLOW;
         }
 
@@ -120,7 +115,6 @@ namespace mathlib {
     {
         if (n < 0)
         {
-            fprintf(stderr, "Error! Factorial of negative number.\n");
             return NEGATIVE_FACTORIAL;
         }
         *result_ptr = factorial_recursive(n);
